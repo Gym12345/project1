@@ -52,11 +52,11 @@ public class HomeController {
 	public String loginMenu(Model model) {
 		return "loginMenu";
 	}
-//	
-//	@RequestMapping(value = "/loginSuccess", method = RequestMethod.GET)
-//	public String loginSuccess(Model model) {
-//		return "loginSuccess";
-//	}
+
+	@RequestMapping(value = "/registerMenu", method = RequestMethod.GET)
+	public String registerMenu(Model model) {
+		return "registerMenu";
+	}
 	
 	
 	 @PostMapping("/loginCheck.do")
@@ -67,10 +67,6 @@ public class HomeController {
 	        
 	        if (userName.equals("noInfo") == false) {
 	        	
-//	        	
-//	        	session.setAttribute("userId", userId); 
-//	            session.setAttribute("name", userName);
-//	            
 	            D.addAttribute("userName", userName);
 	            return "loginSuccess"; // Assuming you have a welcome.jsp or welcome.html page
 	            
@@ -81,6 +77,27 @@ public class HomeController {
 	            return "loginMenu"; // Redirect back to the login page with an error message
 	        }
 	    }
+	 
+	 @PostMapping("/registerCheck.do")
+ 		public String register(@RequestParam String userId, @RequestParam String userPw,  @RequestParam String userName , Model D) {
+		 	
+		 	int result=userListDAO.userRegister(userId,userPw,userName);
+		 	
+		 	if(result==1) {
+		 		
+		 		
+		 		D.addAttribute("message","new user Registered successfully");
+		 		
+		 		return "registerSuccess";
+		 	}
+		 	else {
+		 		D.addAttribute("message","new user Registration failed");
+		 		return "registerMenu";
+		 		
+		 	}
+		 	
+ 	
+	 	}
 
 	    @GetMapping("/logout.do")
 	    public String logout(HttpSession session) {
@@ -88,6 +105,9 @@ public class HomeController {
 
 	        return "redirect:/loginMenu"; // Redirect to the login page after logout
 	    }
+	    
+	    
+	   
    
     
 }

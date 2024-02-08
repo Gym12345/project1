@@ -59,4 +59,26 @@ public class UserListDAOImpl implements UserListDAO {
     public void logout(HttpSession session) {
         session.invalidate(); // 세션 초기화
     }
+
+  //ULID	NUMBER	No		1	
+  //USERID	VARCHAR2(50 BYTE)	No		2	
+  //USERPW	VARCHAR2(100 BYTE)	No		3	
+  //USERNAME	VARCHAR2(100 BYTE)	No		4	
+  //JOIN_DATE	DATE	Yes	sysdate	5	
+  //LASTLOGINTIME	TIMESTAMP(6)	Yes		6	
+	@Override
+	
+	public int userRegister(String userId, String userPw, String userName) {
+	    int result = 0;
+	    try {
+	        System.out.println("userInfos: " + userId + userPw + userName);
+	        result = jt.update("INSERT INTO USERLIST (ULID, USERID, USERPW, USERNAME, JOIN_DATE, LASTLOGINTIME) VALUES (userList_seq.nextval, ?, ?, ?, sysdate, null)",  //query error
+	                userId, userPw, userName);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return result;
+	}
+
 }
