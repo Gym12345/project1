@@ -4,6 +4,8 @@
   함수 매개변수에 HttpSession 을 써줘야 사용가능함
   
   EX)
+
+  
   public String loginCheck(String userId, String userPw, HttpSession session) { //이런식으로
     		
     	
