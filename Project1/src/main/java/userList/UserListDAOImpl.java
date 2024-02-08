@@ -10,21 +10,18 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class UserListDAOImpl implements UserListDAO {
 
-    private HttpSession session;
     private JdbcTemplate jt;
-
-    @Autowired
-    public void setSession(HttpSession session) {
-        this.session = session;
-    }
+  
+    
 
     @Autowired
     public void setJdbcTemplate(JdbcTemplate jt) {
         this.jt = jt;
     }
     
+    
     @Override
-    public String loginCheck(String userId, String userPw) {
+    public String loginCheck(String userId, String userPw, HttpSession session) {
     		
     	
         try {
@@ -32,27 +29,32 @@ public class UserListDAOImpl implements UserListDAO {
         	System.out.println("userId: "+userId);
             String userName = jt.queryForObject("SELECT USERNAME FROM USERLIST WHERE USERID=? AND USERPW=?", new UserListMapper(), userId, userPw);
             
-            if (userName != null) {
+            if (userName.equals(null) == false) {
                 // 세션 변수 저장
+            	
             	System.out.println("userName: " +userName); //잘찍힘
             	
-                session.setAttribute("userid", userId); //error
+                session.setAttribute("userId", userId); 
                 session.setAttribute("name", userName);
+                
+                return userName;
             }
             
-            return userName;
+            else {
+            	return "noInfo";
+            }
             
         } catch (EmptyResultDataAccessException e) {
             // Log or handle the case where the query returns no result
             // For example, you can return a specific value or throw a custom exception
-            return null;
+            return "noInfo";
         } catch (Exception e) {
             // Log or handle other exceptions
             e.printStackTrace();
             throw e;
         }
     }
-
+    
 
     public void logout(HttpSession session) {
         session.invalidate(); // 세션 초기화

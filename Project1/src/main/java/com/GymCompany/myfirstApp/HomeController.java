@@ -48,33 +48,45 @@ public class HomeController {
 	
 	
 	
-	@RequestMapping(value = "/loginMenu.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/loginMenu", method = RequestMethod.GET)
 	public String loginMenu(Model model) {
 		return "loginMenu";
 	}
-	
+//	
+//	@RequestMapping(value = "/loginSuccess", method = RequestMethod.GET)
+//	public String loginSuccess(Model model) {
+//		return "loginSuccess";
+//	}
 	
 	
 	 @PostMapping("/loginCheck.do")
-	    public String login(@RequestParam String userId, @RequestParam String userPw, Model model, HttpSession session) {
+	    public String login(@RequestParam String userId, @RequestParam String userPw, Model D, HttpSession session) {
 		 
-	        String userName = userListDAO.loginCheck(userId, userPw);
+	        String userName = userListDAO.loginCheck(userId, userPw,session);
+	        System.out.println("homecontroller userName:"+userName);
 	        
-	        if (userName != null) {
-	            model.addAttribute("userName", userName);
+	        if (userName.equals("noInfo") == false) {
+	        	
+//	        	
+//	        	session.setAttribute("userId", userId); 
+//	            session.setAttribute("name", userName);
+//	            
+	            D.addAttribute("userName", userName);
 	            return "loginSuccess"; // Assuming you have a welcome.jsp or welcome.html page
+	            
 	        } else {
 	        	
 	        	
-	            model.addAttribute("error", "Invalid credentials");
-	            return "loginMenu.do"; // Redirect back to the login page with an error message
+	            D.addAttribute("error", "Invalid credentials");
+	            return "loginMenu"; // Redirect back to the login page with an error message
 	        }
 	    }
 
-	    @GetMapping("/logout")
+	    @GetMapping("/logout.do")
 	    public String logout(HttpSession session) {
 	        userListDAO.logout(session);
-	        return "redirect:/loginMenu.do"; // Redirect to the login page after logout
+
+	        return "redirect:/loginMenu"; // Redirect to the login page after logout
 	    }
    
     

@@ -8,5 +8,6 @@
 </head>
 <body>
 sssuccess
+<a href="logout.do">logout</a>
 </body>
 </html>
