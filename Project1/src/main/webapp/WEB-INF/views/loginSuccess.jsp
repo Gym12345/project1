@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
+    
+    <%@ page import="userList.UserListDTO" %>
+    
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,6 +11,10 @@
 </head>
 <body>
 sssuccess
+
+
+
+
 <a href="logout.do">logout</a>
 </body>
 </html>

@@ -12,5 +12,7 @@
 <P>  The time on the server is ${serverTime}. </P>
 
 <a href="loginMenu.do">login menu</a>
+<a href="showAllUserInfo">showAllUserInfo</a>
+
 </body>
 </html>

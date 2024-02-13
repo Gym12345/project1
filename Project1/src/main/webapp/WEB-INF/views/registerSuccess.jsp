@@ -15,7 +15,7 @@
 	
     // Retrieve the UserListDTO object from request attribute
     UserListDTO userListDTO = (UserListDTO) request.getAttribute("userListDTO");
-
+	
     // Check if userListDTO is not null before accessing its properties
     if (userListDTO != null) {
 %>
