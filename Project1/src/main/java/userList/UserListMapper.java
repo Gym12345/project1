@@ -13,15 +13,5 @@ public class UserListMapper implements RowMapper<String> {
         
         return userName;
     }
-    
-   
-    public String mapRow2(ResultSet rs, int rowNum) throws SQLException {
-        String userPw = rs.getString("USERPW");
-        
-        return userPw;
-    }
-    
-
-
 }
  

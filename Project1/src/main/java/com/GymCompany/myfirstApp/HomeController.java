@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,10 +30,19 @@ public class HomeController {
 	
 	@Autowired
     private UserListDAO userListDAO;
+	
+	
+	String loginFailCnt="0";
+	int failCnt=Integer.parseInt(loginFailCnt);
 
-
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(value = "/" , method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
+		logger.info("Welcome home! The client locale is {}.", locale);
+		
+		return "home";
+	}
+	@RequestMapping(value = "/home" , method = RequestMethod.GET)
+	public String home1(Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
 		
 		return "home";
@@ -43,7 +53,9 @@ public class HomeController {
 	
 	
 	@RequestMapping(value = "/loginMenu", method = RequestMethod.GET)
-	public String loginMenu(Model model) {
+	public String loginMenu(Model model, HttpSession session) {
+	 	session.setAttribute("loginFailCnt", loginFailCnt);
+
 		return "loginMenu";
 	}
 
@@ -55,23 +67,43 @@ public class HomeController {
 	
 	 @PostMapping("/loginCheck.do")
 	    public String login(@ModelAttribute UserListDTO dto, Model D, HttpSession session) {
-		 
+		 	
+     		
+		 	session.setAttribute("loginFailCnt", loginFailCnt);
 	        String userName = userListDAO.loginCheck(dto,session);
 	        
 	        
 	        if (userName.equals("noInfo")  == false && userName.equals("error")== false) {
+	        	System.out.println(session.getAttribute("loginFailCnt"));
 	        	
+	        	failCnt=0;
+	        	loginFailCnt=Integer.toString(failCnt);  
+	        	session.setAttribute("loginFailCnt", loginFailCnt);
 	        	
-	            D.addAttribute("userName", dto.getUserName());
-	            return "loginSuccess"; // Assuming you have a welcome.jsp or welcome.html page
+	        	D.addAttribute("message", "login successful");
+	            session.setAttribute("userName",  userName);
+	            
+	            return "home"; // Assuming you have a welcome.jsp or welcome.html page
 	            
 	        } else {
 	        	
 	        	
-	            D.addAttribute("error", "Invalid credentials");
+	        	
+	        	failCnt=failCnt+1;
+	        	loginFailCnt=Integer.toString(failCnt);  
+	        	session.setAttribute("loginFailCnt", loginFailCnt);
+	            D.addAttribute("message", "Invalid credentials");
+	            
+	        	if(failCnt>=5) {
+	        		session.setAttribute("locker", "locked");
+	        		return "loginMenu";
+	        	}
+
 	            return "loginMenu"; // Redirect back to the login page with an error message
 	        }
 	    }
+	 
+	 
 	 
 	 @GetMapping("/logout.do")
 	    public String logout(HttpSession session) {
@@ -80,27 +112,16 @@ public class HomeController {
 	        return "redirect:/loginMenu"; // Redirect to the login page after logout
 	    }
 	    
+	 @PostMapping("/invalidateLocker.do")
+	    public String invalidateLocker(HttpSession session) {
+	        // Invalidate the "locker" attribute
+	        session.removeAttribute("locker");
+	        failCnt=0;
+        	loginFailCnt=Integer.toString(failCnt);  
+        	session.setAttribute("loginFailCnt", loginFailCnt);
+	        return "loginMenu";
+	    }
 	 
-//	 @PostMapping("/registerCheck.do")
-// 		public String register(@RequestParam String userId, @RequestParam String userPw,  @RequestParam String userName , Model D) {
-//		 	
-//		 	int result=userListDAO.userRegister(userId,userPw,userName);
-//		 	
-//		 	if(result==1) {
-//		 		
-//		 		
-//		 		D.addAttribute("message","new user Registered successfully");
-//		 		
-//		 		return "registerSuccess";
-//		 	}
-//		 	else {
-//		 		D.addAttribute("message","new user Registration failed");
-//		 		return "registerMenu";
-//		 		
-//		 	}
-//		 	
-// 	
-//	 	}
 	 @PostMapping("/registerCheck.do")
 		public String register(@ModelAttribute UserListDTO dto, Model D) {
 		 	
@@ -109,9 +130,9 @@ public class HomeController {
 		 	if(result==1) {
 		 		
 		 		
-		 		D.addAttribute("message","new user Registered successfully");
+		 		D.addAttribute("message","new user Registered successfully please login");
 		 		
-		 		return "registerSuccess";
+		 		return "loginMenu";
 		 	}
 		 	else {
 		 		D.addAttribute("message","new user Registration failed");

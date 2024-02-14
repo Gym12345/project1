@@ -42,7 +42,7 @@ public class UserListDAOImpl implements UserListDAO {
                     //The strength of the security lies in how passwords are stored and verified
                     if (userName != null) {
                         session.setAttribute("userId", dto.getUserId());
-                        session.setAttribute("name", userName);
+                        session.setAttribute("userName", userName);
                         
                         return userName;
                     } else {
@@ -95,20 +95,6 @@ public class UserListDAOImpl implements UserListDAO {
 
 	    return result;
 	}
-
-
-
-	 
-
-	 
-
-
-
-
-
-	
-
-
 
 
 	public List<UserListDTO> showAllUserList() {

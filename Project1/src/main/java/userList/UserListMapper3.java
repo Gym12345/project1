@@ -13,11 +13,6 @@ public class UserListMapper3 implements RowMapper<String> {
         
         return userPw;
     }
-    
    
-   
-    
-
-
 }
  

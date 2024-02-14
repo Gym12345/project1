@@ -17,15 +17,5 @@ public class UserListMapper2 implements RowMapper<UserListDTO> {
         userListDTO.setLastLoginTime(rs.getTimestamp("LASTLOGINTIME").toLocalDateTime());
         return userListDTO;
     }
-	
-//    public UserListDTO mapRow2(ResultSet rs, int rowNum) throws SQLException {
-//        UserListDTO user = new UserListDTO();
-//        user.setUserId(rs.getString("USERID"));
-//        user.setUserName(rs.getString("USERNAME"));
-//        // Add more fields as needed
-//
-//        return user;
-//    }
-
 }
  
