@@ -28,8 +28,9 @@
                 <tr>
                     <td>${user.ulid}</td>
                     <td>${user.userId}</td>
+                    <td>${user.userPw}</td>
                     
-                    
+                    <!-- 
                     <td>
                        
                         <c:set var="asterisks" value="" />
@@ -41,7 +42,7 @@
                         <c:out value="${asterisks}"/>
                     </td>
                     
-                    
+                     -->
                     <td>${user.userName}</td>
                     <td>${user.joinDate}</td>
                     <td>${user.lastLoginTime}</td>

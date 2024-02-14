@@ -5,21 +5,17 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-public class UserListMapper implements RowMapper<String> {
+public class UserListMapper3 implements RowMapper<String> {
 
     @Override
     public String mapRow(ResultSet rs, int rowNum) throws SQLException {
-        String userName = rs.getString("USERNAME");
-        
-        return userName;
-    }
-    
-   
-    public String mapRow2(ResultSet rs, int rowNum) throws SQLException {
         String userPw = rs.getString("USERPW");
         
         return userPw;
     }
+    
+   
+   
     
 
 
