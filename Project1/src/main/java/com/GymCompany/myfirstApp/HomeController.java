@@ -10,7 +10,6 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +17,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import userList.UserListDAO;
 import userList.UserListDTO;
 
@@ -60,7 +62,10 @@ public class HomeController {
 	}
 
 	@RequestMapping(value = "/registerMenu", method = RequestMethod.GET)
-	public String registerMenu(Model model) {
+	public String registerMenu(Model model,HttpSession session) {
+		 boolean redundancyResult = true;
+	     session.setAttribute("redundancyResult", redundancyResult);
+
 		return "registerMenu";
 	}
 	
@@ -86,8 +91,6 @@ public class HomeController {
 	            return "home"; // Assuming you have a welcome.jsp or welcome.html page
 	            
 	        } else {
-	        	
-	        	
 	        	
 	        	failCnt=failCnt+1;
 	        	loginFailCnt=Integer.toString(failCnt);  
@@ -128,8 +131,7 @@ public class HomeController {
 		 	int result=userListDAO.userRegister(dto);
 		 	
 		 	if(result==1) {
-		 		
-		 		
+
 		 		D.addAttribute("message","new user Registered successfully please login");
 		 		
 		 		return "loginMenu";
@@ -142,6 +144,21 @@ public class HomeController {
 		 	
 	
 	 	}
+	 
+	 
+	 
+	 @PostMapping("/userIdRedundancyCheck.do")
+	 public @ResponseBody String userIdRedundancyCheck(@RequestParam String id, HttpSession session) {
+	     int redundancyResult = userListDAO.userIdRedundancyCheck(id);
+	     System.out.println("RedundancyResult: " + redundancyResult);
+	     session.setAttribute("redundancyResult", redundancyResult);
+	     
+	     if (redundancyResult == 0) {
+	         return "false";
+	     } else {
+	         return "true";
+	     }
+	 }
 
 
 	 @RequestMapping("/showAllUserInfo")

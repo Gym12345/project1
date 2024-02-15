@@ -23,7 +23,7 @@ public class UserListDAOImpl implements UserListDAO {
     public void setJdbcTemplate(JdbcTemplate jt) {
         this.jt = jt;
     }
-    
+    //static int RedundancyResult=0;
     
     
     @Override
@@ -66,7 +66,7 @@ public class UserListDAOImpl implements UserListDAO {
 
 
     
-
+    @Override
     public void logout(HttpSession session) {
         session.invalidate(); // 세션 초기화
     }
@@ -78,7 +78,7 @@ public class UserListDAOImpl implements UserListDAO {
   //JOIN_DATE	DATE	Yes	sysdate	5	
   //LASTLOGINTIME	TIMESTAMP(6)	Yes		6	
 
-    
+    @Override
 	public int userRegister(UserListDTO dto) {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		
@@ -96,7 +96,33 @@ public class UserListDAOImpl implements UserListDAO {
 	    return result;
 	}
 
-
+	@Override
+		public int userIdRedundancyCheck(String userId) {
+			int RedundancyResult=0;
+			String userName;
+			try {
+				userName=jt.queryForObject("SELECT USERNAME FROM USERLIST WHERE USERID=?",new UserListMapper() ,userId);
+				System.out.println("userName"+userName);
+				if(userName != null) { //중복 
+					RedundancyResult=1;
+				}
+				else {  //중복X
+					RedundancyResult=0;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			
+			return RedundancyResult;
+		}
+	
+	
+	
+	
+	
+	
+	@Override
 	public List<UserListDTO> showAllUserList() {
 	    List<UserListDTO> allUserInfo = new ArrayList<>();
 
@@ -112,6 +138,9 @@ public class UserListDAOImpl implements UserListDAO {
 	    return allUserInfo;
 	}
 
+
+
+	
 	
 
 }

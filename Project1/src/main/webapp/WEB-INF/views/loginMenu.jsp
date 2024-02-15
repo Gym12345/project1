@@ -47,7 +47,6 @@
     <form action="loginCheck.do" method="post">
         <label for="userId">id:</label>
         <input type="text"  name="userId"><br>
-        
         <label for="userPw">pw:</label>
         <input type="password"  name="userPw"><br>
         
