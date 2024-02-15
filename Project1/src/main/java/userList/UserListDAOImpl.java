@@ -127,7 +127,7 @@ public class UserListDAOImpl implements UserListDAO {
 	    List<UserListDTO> allUserInfo = new ArrayList<>();
 
 	    try {
-	        allUserInfo = jt.query("SELECT * FROM UserList", new UserListMapper2());
+	        allUserInfo = jt.query("SELECT * FROM USERLIST ORDER BY USERLIST.ULID ASC", new UserListMapper2());
 
 	    } catch (Exception e) {
 	        // Handle exception (log, rethrow, etc.)

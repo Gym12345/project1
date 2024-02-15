@@ -57,7 +57,7 @@
         <label for="userId">ID:</label>
         <input type="text" name="userId">
         <button type="button" onclick="checkRedundancy()">Check Redundancy</button>
-        <div id="tempCheck"></div>
+        <!--  -div id="tempCheck"></div> -->
         
         <div id="passwordSection">
             <!-- Password input field will be dynamically updated here -->
