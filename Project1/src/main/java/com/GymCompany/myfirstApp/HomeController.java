@@ -26,6 +26,7 @@ import userList.UserListDTO;
 
 // 함수 사용 및 리디렉션 , Controller
 @Controller
+
 public class HomeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
@@ -37,12 +38,14 @@ public class HomeController {
 	String loginFailCnt="0";
 	int failCnt=Integer.parseInt(loginFailCnt);
 
+	
 	@RequestMapping(value = "/" , method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
 		
 		return "home";
 	}
+	
 	@RequestMapping(value = "/home" , method = RequestMethod.GET)
 	public String home1(Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
@@ -53,11 +56,10 @@ public class HomeController {
 	
 	
 	
-	
 	@RequestMapping(value = "/loginMenu", method = RequestMethod.GET)
 	public String loginMenu(Model model, HttpSession session) {
 	 	session.setAttribute("loginFailCnt", loginFailCnt);
-
+	 	 logger.info("Displaying login menu.");
 		return "loginMenu";
 	}
 
@@ -65,7 +67,7 @@ public class HomeController {
 	public String registerMenu(Model model,HttpSession session) {
 		 boolean redundancyResult = true;
 	     session.setAttribute("redundancyResult", redundancyResult);
-
+	     logger.info("Displaying registerMenu");
 		return "registerMenu";
 	}
 	
@@ -80,7 +82,7 @@ public class HomeController {
 	        
 	        if (userName.equals("noInfo")  == false && userName.equals("error")== false) {
 	        	System.out.println(session.getAttribute("loginFailCnt"));
-	        	
+	        	logger.info("succesfully logined:"+dto.getUserId());
 	        	failCnt=0;
 	        	loginFailCnt=Integer.toString(failCnt);  
 	        	session.setAttribute("loginFailCnt", loginFailCnt);
@@ -96,9 +98,11 @@ public class HomeController {
 	        	loginFailCnt=Integer.toString(failCnt);  
 	        	session.setAttribute("loginFailCnt", loginFailCnt);
 	            D.addAttribute("message", "Invalid credentials");
-	            
+	        	logger.info("bad login try as :"+dto.getUserId());
+
 	        	if(failCnt>=5) {
 	        		session.setAttribute("locker", "locked");
+	        		logger.info("locked (bad UserId):"+ dto.getUserId());
 	        		return "loginMenu";
 	        	}
 
@@ -109,19 +113,23 @@ public class HomeController {
 	 
 	 
 	 @GetMapping("/logout.do")
-	    public String logout(HttpSession session) {
+	    public String logout(HttpSession session,UserListDTO dto) {
+		 	logger.info("User is being Logout:"+dto.getUserId());
 	        userListDAO.logout(session);
-
+	        
 	        return "redirect:/loginMenu"; // Redirect to the login page after logout
 	    }
 	    
 	 @PostMapping("/invalidateLocker.do")
 	    public String invalidateLocker(HttpSession session) {
 	        // Invalidate the "locker" attribute
+		 	logger.info("unlocking (bad UserId)");
 	        session.removeAttribute("locker");
 	        failCnt=0;
         	loginFailCnt=Integer.toString(failCnt);  
         	session.setAttribute("loginFailCnt", loginFailCnt);
+        	
+        	
 	        return "loginMenu";
 	    }
 	 
@@ -133,11 +141,12 @@ public class HomeController {
 		 	if(result==1) {
 
 		 		D.addAttribute("message","new user Registered successfully please login");
-		 		
+		 		logger.info("newly registered:"+dto.getUserId());
 		 		return "loginMenu";
 		 	}
 		 	else {
 		 		D.addAttribute("message","new user Registration failed");
+		 		logger.info("error occured during process(register) as:"+dto.getUserId());
 		 		return "registerMenu";
 		 		
 		 	}
@@ -170,7 +179,7 @@ public class HomeController {
 		 
 		 D.addAttribute("allUserInfo", infos);
 		
-		 
+		 logger.info("showing whole info");
 		 return "showAllUserInfo";
 	 }
 	 	 
