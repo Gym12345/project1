@@ -55,7 +55,7 @@ public class UserListDAOImpl implements UserListDAO {
                 return "noInfo";
             }
         } catch (EmptyResultDataAccessException e) {
-            return "error";
+            return "noInfo";
         } catch (Exception e) {
             e.printStackTrace();
             throw e;

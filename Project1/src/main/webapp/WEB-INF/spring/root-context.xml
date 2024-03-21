@@ -8,11 +8,11 @@
     <!-- Define HikariCP configuration -->
     <bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
         <property name="driverClassName" value="oracle.jdbc.OracleDriver"/>
-        <property name="jdbcUrl" value="jdbc:oracle:thin:@localhost:1521:XE"/>
+        <property name="jdbcUrl" value="jdbc:oracle:thin:@localhost:1521:orcl"/>
         <property name="username" value="C##Gym12345"/>
         <property name="password" value="991224"/>
     </bean>
-
+	
     <!-- Define DataSource using HikariCP -->
     <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource">
         <constructor-arg ref="hikariConfig" />
